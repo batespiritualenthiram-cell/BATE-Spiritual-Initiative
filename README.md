@@ -2,7 +2,7 @@
 
 > **Regain Your Inner Peace & Emotional Balance**
 
-BATE is a spiritual support platform designed to help individuals navigate the complex emotions specifically associated with receiving money or incentives during elections. Our platform offers a symbolic "Enthiram" (Digital Spiritual Asset) to help restore a positive mindset and mental clarity for those feeling conflicted between their actions and personal beliefs.
+Live Server: https://bate-spiritual-initiative.onrender.com - BATE is a spiritual support platform designed to help individuals navigate the complex emotions specifically associated with receiving money or incentives during elections. Our platform offers a symbolic "Enthiram" (Digital Spiritual Asset) to help restore a positive mindset and mental clarity for those feeling conflicted between their actions and personal beliefs.
 
 ---
 
