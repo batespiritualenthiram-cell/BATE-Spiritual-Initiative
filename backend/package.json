@@ -1,7 +1,7 @@
 {
     "name": "bharathiya-art-tech-expertism-backend",
     "version": "1.0.0",
-    "description": "Backend server for Bharathiya Art Tech Expertism — Vedic Astrology Report Generator",
+    "description": "Backend server for Bharathiya Art Tech Expertism — Vedic Astrology PDF Generator",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",

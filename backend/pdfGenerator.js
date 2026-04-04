@@ -63,10 +63,10 @@ function generateReport(data) {
                 size: 'A4',
                 margins: { top: 50, bottom: 50, left: 50, right: 50 },
                 info: {
-                    Title: 'Bharathiya Art Tech Expertism - Astrology Report',
+                    Title: 'Bharathiya Art Tech Expertism - Astrology PDF',
                     Author: 'Bharathiya Art Tech Expertism',
-                    Subject: `Vedic Astrology Report for ${data.name}`,
-                    Keywords: 'astrology, vedic, horoscope, report'
+                    Subject: `Vedic Astrology PDF for ${data.name}`,
+                    Keywords: 'astrology, vedic, horoscope, pdf'
                 }
             });
 
@@ -95,7 +95,7 @@ function generateReport(data) {
 
             // === HEADER ===
             doc.fontSize(10).fillColor(gold)
-                .text('VEDIC ASTROLOGY REPORT', margin, 30, { align: 'center', width: contentWidth });
+                .text('VEDIC ASTROLOGY PDF', margin, 30, { align: 'center', width: contentWidth });
 
             doc.fontSize(24).fillColor(white).font('Helvetica-Bold')
                 .text('Bharathiya Art Tech', margin, 50, { align: 'center', width: contentWidth });
@@ -216,13 +216,13 @@ function generateReport(data) {
                 .strokeColor('#3c3c64').lineWidth(0.3).stroke();
 
             doc.fontSize(7).fillColor(muted).font('Helvetica')
-                .text('Bharathiya Art Tech Expertism | Vedic Astrology Report', margin, footerY, {
+                .text('Bharathiya Art Tech Expertism | Vedic Astrology PDF', margin, footerY, {
                     align: 'center', width: contentWidth
                 });
             doc.text(`Generated: ${new Date().toLocaleDateString('en-IN')} | ID: ${data.regId.sanskrit}`, margin, footerY + 10, {
                 align: 'center', width: contentWidth
             });
-            doc.text('This report is for informational purposes only.', margin, footerY + 20, {
+            doc.text('This PDF is for informational purposes only.', margin, footerY + 20, {
                 align: 'center', width: contentWidth
             });
 

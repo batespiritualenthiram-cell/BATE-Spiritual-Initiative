@@ -190,7 +190,7 @@ app.post('/api/generate-report', async (req, res) => {
         });
 
         // Set response headers for PDF download
-        const filename = `BATE_Report_${regId.numeric}.pdf`;
+        const filename = `BATE_Astrology_${regId.numeric}.pdf`;
         res.set({
             'Content-Type': 'application/pdf',
             'Content-Disposition': `attachment; filename="${filename}"`,

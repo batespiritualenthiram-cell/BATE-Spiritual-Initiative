@@ -259,7 +259,24 @@
                 document.body.classList.add('payment-success');
                 card.classList.add('success');
                 
-                // 1. Confetti Explosion (Milti-burst)
+                // 0. Screen Flash Effect
+                const flash = document.createElement('div');
+                flash.style.position = 'fixed';
+                flash.style.top = '0';
+                flash.style.left = '0';
+                flash.style.width = '100vw';
+                flash.style.height = '100vh';
+                flash.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+                flash.style.zIndex = '2000';
+                flash.style.pointerEvents = 'none';
+                flash.style.transition = 'opacity 0.5s ease-out';
+                document.body.appendChild(flash);
+                setTimeout(() => {
+                    flash.style.opacity = '0';
+                    setTimeout(() => flash.remove(), 500);
+                }, 50);
+
+                // 1. Confetti Explosion (Multi-burst)
                 const count = 200;
                 const defaults = { origin: { y: 0.7 }, zIndex: 1100 };
 
@@ -277,7 +294,18 @@
                 fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
                 fire(0.1, { spread: 120, startVelocity: 45 });
 
-                // 2. Emoji Burst
+                // 2. Firework Finale (Repeated bursts)
+                let duration = 3 * 1000;
+                let animationEnd = Date.now() + duration;
+                let interval = setInterval(function() {
+                    let timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+                    let particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4 + 0.1, y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4 + 0.5, y: Math.random() - 0.2 } }));
+                }, 250);
+
+                // 3. Emoji Burst
                 const scalar = 2;
                 const lotus = confetti.shapeFromText({ text: '🕉️', scalar });
                 const star = confetti.shapeFromText({ text: '✨', scalar });
@@ -292,11 +320,11 @@
                     scalar
                 });
 
-                // 3. Balloons Floating up
+                // 4. Balloons Floating up
                 const balloonContainer = document.getElementById('balloon-container');
                 const colors = ['#8a2be2', '#00f2fe', '#ffd700', '#ff0080', '#10b981'];
                 
-                for(let i=0; i<15; i++) {
+                for(let i=0; i<20; i++) {
                     setTimeout(() => {
                         const balloon = document.createElement('div');
                         balloon.className = 'balloon';
@@ -305,7 +333,7 @@
                         balloon.style.animation = `floatUp ${4 + Math.random() * 3}s linear forwards`;
                         balloonContainer.appendChild(balloon);
                         setTimeout(() => balloon.remove(), 7000);
-                    }, i * 200);
+                    }, i * 150);
                 }
             };
 

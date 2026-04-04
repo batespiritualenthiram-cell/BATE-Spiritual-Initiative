@@ -1,0 +1,17 @@
+{
+  "name": "bate-spiritual-initiative",
+  "version": "1.0.0",
+  "description": "Spiritual platform for the BATE Initiative",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "install-all": "cd backend && npm install",
+    "build": "npm run install-all"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "keywords": [],
+  "author": "Bharathiya Art Tech Expertism",
+  "license": "ISC"
+}
