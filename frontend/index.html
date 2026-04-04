@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bharathiya Art Tech Expertism — Discover your personalized Vedic astrology report with a unique Sanskrit registration number. Instant PDF download.">
+    <meta name="keywords" content="astrology, vedic astrology, horoscope, birth chart, Sanskrit, astrology report, Bharathiya Art Tech">
+    <meta name="author" content="Bharathiya Art Tech Expertism">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bharathiya Art Tech Expertism — Personalized Astrology Reports">
+    <meta property="og:description" content="Discover your personalized Vedic astrology report with a unique Sanskrit registration number. Instant PDF download.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bharathiya-art-tech.com">
+    <meta property="og:image" content="https://bharathiya-art-tech.com/assets/og-image.jpg">
+    
+    <title>Bharathiya Art Tech Expertism — Personalized Astrology Reports</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animate On Scroll -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ============ STAR CANVAS BACKGROUND ============ -->
+    <canvas id="star-canvas"></canvas>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="javascript:void(0)" class="nav-logo" id="admin-logo-trigger">
+                <i class="fas fa-om"></i>
+                <span>BATE</span>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#hero" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#register" class="nav-link">Get Report</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+                <li><a href="#register" class="nav-link nav-cta">Generate Report</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ============ SECTION 1: HERO ============ -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+            <div class="hero-badge">
+                <i class="fas fa-star-of-david"></i>
+                <span>Bharathiya Spiritual Tech</span>
+            </div>
+            <h1 class="hero-title">
+                Bharathiya Art Tech<br>
+                <span class="gradient-text">Expertism</span>
+            </h1>
+            <p class="hero-subtitle">Restore Peace of Mind with Bharathiya Spiritual Tech</p>
+            <p class="hero-desc">
+                A digital enthiram and symbolic yagam designed to help you reconnect with your inner values and positive mindset.
+            </p>
+            <div class="hero-buttons">
+                <a href="#register" class="btn btn-primary btn-glow" id="hero-cta">
+                    <i class="fas fa-scroll"></i>
+                    Generate My Enthiram
+                </a>
+                <a href="#about" class="btn btn-outline">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </a>
+            </div>
+        </div>
+        <div class="hero-video" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="300">
+            <div class="video-wrapper glass-card">
+                <!-- Placeholder YouTube video — replace src with your video -->
+                <iframe 
+                    id="hero-youtube"
+                    src="https://www.youtube.com/embed/tO01J-M3g0U?autoplay=1&mute=1&loop=1&controls=1&rel=0&playlist=tO01J-M3g0U"
+                    title="Bharathiya Art Tech Expertism Introduction"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen
+                    loading="lazy"
+                ></iframe>
+            </div>
+        </div>
+        <div class="scroll-indicator" id="scroll-indicator">
+            <span>Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ============ SECTION: PURPOSE ============ -->
+    <section id="purpose" class="purpose-section section">
+        <div class="container text-center">
+            <h2 class="section-title">Why This <span class="gradient-text">Initiative?</span></h2>
+            <p style="max-width: 800px; margin: 0 auto; line-height: 1.8; color: var(--text-secondary); font-size: 1.1rem;">
+                In today’s world, many individuals experience emotional conflict when making important decisions under pressure. Bharathiya Art Tech Expertism offers a symbolic spiritual approach through a digital enthiram and guided yagam to promote mental clarity, positivity, and inner peace.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 2: ABOUT / HOW IT WORKS ============ -->
+    <section id="about" class="about-section section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag"><i class="fas fa-star"></i> How It Works</span>
+                <h2 class="section-title">A Journey to <span class="gradient-text">Inner Peace</span></h2>
+                <p class="section-desc">Follow these simple steps to obtain your spiritual support symbol.</p>
+            </div>
+            <div class="about-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                <div class="about-card glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="about-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h3>Register</h3>
+                    <p>Enter basic details to generate your personal enthiram.</p>
+                </div>
+                <div class="about-card glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="about-icon">
+                        <i class="fas fa-om"></i>
+                    </div>
+                    <h3>Symbolic Ritual</h3>
+                    <p>A positive-energy yagam is performed symbolically.</p>
+                </div>
+                <div class="about-card glass-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="about-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Download Enthiram</h3>
+                    <p>Receive your digital enthiram instantly to keep on your device.</p>
+                </div>
+            </div>
+            
+            <div class="benefits-section glass-card" style="margin-top: 60px; text-align: center; padding: 30px;" data-aos="fade-up">
+                <h3 style="color: var(--accent-purple-light); margin-bottom: 25px;">Exclusive Benefits</h3>
+                <ul style="list-style: none; padding: 0; display: inline-block; text-align: left; color: var(--text-secondary);">
+                    <li style="margin-bottom: 12px; font-size: 1.1rem;"><i class="fas fa-check-circle" style="color: var(--accent-emerald); margin-right: 12px;"></i>Encourages positive mindset</li>
+                    <li style="margin-bottom: 12px; font-size: 1.1rem;"><i class="fas fa-check-circle" style="color: var(--accent-emerald); margin-right: 12px;"></i>Reduces mental stress</li>
+                    <li style="margin-bottom: 12px; font-size: 1.1rem;"><i class="fas fa-check-circle" style="color: var(--accent-emerald); margin-right: 12px;"></i>Promotes inner clarity</li>
+                    <li style="margin-bottom: 12px; font-size: 1.1rem;"><i class="fas fa-check-circle" style="color: var(--accent-emerald); margin-right: 12px;"></i>Traditional spiritual approach</li>
+                    <li style="margin-bottom: 12px; font-size: 1.1rem;"><i class="fas fa-check-circle" style="color: var(--accent-emerald); margin-right: 12px;"></i>Instant digital access</li>
+                </ul>
+            </div>
+            <div class="about-cta" data-aos="fade-up" data-aos-delay="500" style="margin-top: 40px;">
+                <a href="#register" class="btn btn-primary btn-glow">
+                    <i class="fas fa-scroll"></i>
+                    Get My Enthiram
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 3: REGISTRATION FORM ============ -->
+    <section id="register" class="register-section section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag"><i class="fas fa-pen-fancy"></i> Generate Enthiram</span>
+                <h2 class="section-title">Enter Your <span class="gradient-text">Details</span></h2>
+                <p class="section-desc">Fill in your details below to generate a personalized digital enthiram with a unique Sanskrit registration number.</p>
+            </div>
+            <div class="form-container" data-aos="fade-up" data-aos-delay="200">
+                <form id="astrology-form" class="astrology-form glass-card" novalidate>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="user-name">
+                                <i class="fas fa-user"></i> Full Name <span class="required">*</span>
+                            </label>
+                            <input type="text" id="user-name" name="name" placeholder="Enter your full name" required autocomplete="name">
+                            <span class="form-error" id="name-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-phone">
+                                <i class="fas fa-phone"></i> Phone Number <span class="required">*</span>
+                            </label>
+                            <input type="tel" id="user-phone" name="phone" placeholder="e.g., 9942754212" required autocomplete="tel">
+                            <span class="form-error" id="phone-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-city">
+                                <i class="fas fa-map-marker-alt"></i> City <span class="required">*</span>
+                            </label>
+                            <input type="text" id="user-city" name="city" placeholder="e.g., Chennai" required>
+                            <span class="form-error" id="city-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="user-email">
+                                <i class="fas fa-envelope"></i> Mail ID <span class="required">*</span>
+                            </label>
+                            <input type="email" id="user-email" name="email" placeholder="your@email.com" required autocomplete="email">
+                            <span class="form-error" id="email-error"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-glow btn-submit" id="submit-btn">
+                        <i class="fas fa-scroll"></i>
+                        <span>Generate My Enthiram</span>
+                        <div class="btn-loader" id="btn-loader"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 4: RESULT (Sanskrit ID + Payment Gate + Download) ============ -->
+    <!-- ============ SECTION 4: RESULT (Sanskrit ID -> Redirect to Payment) ============ -->
+    <section id="result" class="result-section section" style="display: none;">
+        <div class="container">
+            <div class="result-card glass-card" data-aos="zoom-in">
+                <div class="result-success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2 class="section-title">Your Enthiram is <span class="gradient-text">Ready!</span></h2>
+                
+                <div class="sanskrit-id-box">
+                    <span class="sanskrit-label">Your Unique Registration ID</span>
+                    <div class="sanskrit-id" id="sanskrit-id-display">
+                        <!-- Dynamically filled -->
+                    </div>
+                    <div class="numeric-id" id="numeric-id-display">
+                        <!-- Dynamically filled -->
+                    </div>
+                    <span class="sanskrit-sublabel">Save this ID for future reference</span>
+                </div>
+
+                <div class="result-details" id="result-details">
+                    <!-- Dynamically filled with user info summary -->
+                </div>
+
+                <div style="margin-top: 30px; text-align: center;">
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Proceed to complete your symbolic offering to unlock the download.</p>
+                    <button class="btn btn-primary btn-glow" id="proceed-payment-btn" style="width: 100%; max-width: 300px; padding: 15px;">
+                        <i class="fas fa-arrow-right"></i>
+                        Proceed to Payment & Download
+                    </button>
+                    <button class="btn btn-outline" id="generate-another-btn" style="margin-top: 15px;">
+                        <i class="fas fa-redo"></i>
+                        Generate Another
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 6: FEATURES ============ -->
+    <section id="features" class="features-section section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-tag"><i class="fas fa-gem"></i> Features</span>
+                <h2 class="section-title">Why Choose <span class="gradient-text">Us</span></h2>
+                <p class="section-desc">Built with care, designed for everyone.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Instant Generation</h3>
+                    <p>Get your personalized enthiram in seconds — no waiting, no queues.</p>
+                </div>
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon icon-sanskrit"><span>१२३</span></div>
+                    <h3>Unique Sanskrit ID</h3>
+                    <p>Every enthiram carries a unique registration number in Sanskrit numerals.</p>
+                </div>
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-unlock"></i></div>
+                    <h3>No Signup Required</h3>
+                    <p>No accounts, no passwords. Just enter your details and download.</p>
+                </div>
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fas fa-feather-alt"></i></div>
+                    <h3>Lightweight Architecture</h3>
+                    <p>Blazing fast loading with zero bloat — optimized for performance.</p>
+                </div>
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Fully responsive design that works beautifully on any device.</p>
+                </div>
+                <div class="feature-card glass-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Privacy First</h3>
+                    <p>Your data stays on your device. We don't store or share your information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ DISCLAIMER ============ -->
+    <section class="disclaimer-section" style="padding: 40px 20px; text-align: center; border-top: 1px solid var(--glass-border); margin-top: 40px;">
+        <div class="container">
+            <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.6;">
+                <strong>Disclaimer:</strong> This initiative is intended for emotional positivity and symbolic spiritual support. It does not influence political choices or beliefs.
+            </p>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 7: FOOTER ============ -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <i class="fas fa-om"></i>
+                        <span>Bharathiya Art Tech Expertism</span>
+                    </div>
+                    <p>Technology guided by tradition for a peaceful mind.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#purpose">Why This Initiative?</a></li>
+                        <li><a href="#about">How It Works</a></li>
+                        <li><a href="#register">Generate Enthiram</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact" id="contact">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>
+                            <i class="fas fa-phone"></i>
+                            <a href="tel:+919942754212">+91 99427 54212</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-envelope"></i>
+                            <a href="mailto:contact@bharathiya-art-tech.com">contact@bharathiya-art-tech.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-social">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Bharathiya Art Tech Expertism. All rights reserved.</p>
+                <p>Made with <i class="fas fa-heart" style="color: var(--accent-rose);"></i><span id="admin-trigger" style="cursor:default; user-select:none; opacity:0.01; padding:0 4px;">.</span>for the cosmic seekers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============ SECRET ADMIN DASHBOARD ============ -->
+    <div id="admin-overlay" class="admin-overlay" style="display: none;">
+        <div class="admin-dashboard glass-card">
+            <div class="admin-header">
+                <h2><i class="fas fa-user-shield"></i> Purchase Tracker</h2>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button id="admin-clear-all" class="btn btn-sm" style="background:rgba(239,68,68,0.2);color:#ef4444;border:1px solid rgba(239,68,68,0.3);padding:6px 12px;font-size:0.75rem;border-radius:6px;cursor:pointer;"><i class="fas fa-trash-alt"></i> Clear All</button>
+                    <button id="admin-close" class="btn btn-sm btn-outline"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="admin-table-wrapper" style="overflow-x: auto;">
+                <table class="admin-table" style="width: 100%; text-align: left; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border);">Timestamp</th>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border);">Name</th>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border);">Details</th>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border);">Sanskrit ID</th>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border);">Numeric ID</th>
+                            <th style="padding: 10px; border-bottom: 1px solid var(--glass-border); text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-table-body">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <!-- AOS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <!-- jsPDF for client-side PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Main Script -->
+    <script src="script.js"></script>
+</body>
+</html>
