@@ -160,6 +160,11 @@
             100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
         }
 
+        @keyframes sweep {
+            0% { transform: translateX(-100%) skewX(-20deg); }
+            100% { transform: translateX(200%) skewX(-20deg); }
+        }
+
         .desktop-only { display: none; }
         @media (min-width: 768px) {
             .desktop-only { display: block; }
@@ -216,11 +221,24 @@
                     <i class="fas fa-heart-circle-check"></i>
                 </div>
                 <h2 style="font-size: 2.2rem; margin-bottom: 10px; color: var(--accent-gold); font-weight: 700;">Gratitude Received!</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 35px; font-size: 1.15rem; line-height: 1.6;">Your spiritual offering has been verified. Your personalized Enthiram is now unlocked.</p>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.15rem; line-height: 1.6;">Your spiritual offering has been verified.</p>
                 
-                <a id="download-link" href="assets/Enthiram_yantras.png" download="My_Enthiram.png" class="btn btn-primary btn-glow" style="display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 20px; width: 100%;">
-                    <i class="fas fa-cloud-arrow-down" style="margin-right: 12px;"></i> DOWNLOAD MY ENTHIRAM
-                </a>
+                <!-- PIN REVEAL BOX -->
+                <div style="margin: 20px 0; padding: 25px; background: rgba(16, 185, 129, 0.1); border-radius: 15px; border: 2px solid var(--accent-emerald); position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.15), transparent); animation: sweep 2s infinite;"></div>
+                    <p style="font-size: 0.9rem; color: var(--accent-emerald); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Sacred Unlock PIN Revealed</p>
+                    <p style="font-size: 4rem; color: white; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.4); margin: 0;">11</p>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px;">Enter the Secret PIN above to unlock your Enhtiram</p>
+                    <input type="text" id="secret-pin-input" class="verification-input" placeholder="PIN" style="max-width: 150px; border-color: var(--accent-emerald); background: rgba(0,0,0,0.5); font-size: 2.5rem; letter-spacing: 8px; margin: 0 auto 20px auto;">
+                    
+                    <a id="download-link" href="assets/Enthiram_yantras.png" download="My_Enthiram.png" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 20px; width: 100%; pointer-events: none; opacity: 0.4; filter: grayscale(1); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                        <i class="fas fa-lock" id="download-lock-icon" style="margin-right: 12px;"></i> 
+                        <span id="download-btn-text">LOCKED — ENTER PIN</span>
+                    </a>
+                </div>
                 
                 <div style="margin-top: 30px; padding: 20px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px dashed var(--accent-emerald);">
                     <p style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fas fa-lightbulb" style="color: var(--accent-emerald); margin-right: 8px;"></i> Keep this symbol on your home screen for positive energy and mental clarity.</p>
@@ -395,6 +413,36 @@
                     verifyBtn.disabled = false;
                     errorText.textContent = "Connection Failure. Check internet.";
                     errorBox.style.display = 'block';
+                }
+            });
+
+            // --- SECRET PIN LOGIC ---
+            const pinInput = document.getElementById('secret-pin-input');
+            const downloadBtn = document.getElementById('download-link');
+            const downloadIcon = document.getElementById('download-lock-icon');
+            const downloadText = document.getElementById('download-btn-text');
+
+            pinInput.addEventListener('input', (e) => {
+                if (e.target.value === '11') {
+                    // Unlock!
+                    downloadBtn.style.pointerEvents = 'auto';
+                    downloadBtn.style.opacity = '1';
+                    downloadBtn.style.filter = 'none';
+                    downloadBtn.classList.add('btn-glow');
+                    downloadIcon.className = 'fas fa-cloud-arrow-down';
+                    downloadText.textContent = 'DOWNLOAD MY ENTHIRAM';
+                    
+                    // Simple success feedback
+                    pinInput.style.borderColor = 'var(--accent-emerald)';
+                    pinInput.style.boxShadow = '0 0 20px var(--accent-emerald)';
+                } else {
+                    // Keep locked
+                    downloadBtn.style.pointerEvents = 'none';
+                    downloadBtn.style.opacity = '0.4';
+                    downloadBtn.style.filter = 'grayscale(1)';
+                    downloadBtn.classList.remove('btn-glow');
+                    downloadIcon.className = 'fas fa-lock';
+                    downloadText.textContent = 'LOCKED — ENTER PIN';
                 }
             });
         });
