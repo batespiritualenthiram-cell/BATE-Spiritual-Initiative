@@ -179,137 +179,67 @@
         .desktop-only { display: none; }
         @media (min-width: 768px) { .desktop-only { display: block; } }
 
-        /* ====== DEEP SPACE SPACER (forces scrolling) ====== */
-        .deep-space {
-            height: 260vh;
-            position: relative;
-            background: linear-gradient(180deg,
-                transparent 0%,
-                rgba(5, 5, 20, 0.3) 30%,
-                rgba(5, 5, 20, 0.6) 70%,
-                rgba(5, 5, 20, 0.8) 100%
-            );
-            pointer-events: none;
-        }
-
-        /* ====== SECRET BOTTOM SECTION ====== */
-        .secret-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-            padding: 40px 20px;
-        }
-
-        /* The glowing green secret download button */
-        .secret-download-btn {
+        /* ====== VERIFY BUTTON (inline, small) ====== */
+        .verify-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 16px;
-            padding: 28px 60px;
-            background: rgba(16, 185, 129, 0.12);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 2px solid rgba(16, 185, 129, 0.55);
-            border-radius: 24px;
+            gap: 8px;
+            width: 100%;
+            padding: 12px 20px;
+            margin-top: 14px;
+            background: rgba(16, 185, 129, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(16, 185, 129, 0.4);
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1.35rem;
-            font-weight: 800;
+            font-size: 0.88rem;
+            font-weight: 700;
             color: #10b981;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            letter-spacing: 1px;
             font-family: 'Outfit', sans-serif;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: secretGlow 2.5s ease-in-out infinite;
+            transition: all 0.3s ease;
+            animation: verifyGlow 2.5s ease-in-out infinite;
             position: relative;
             overflow: hidden;
         }
 
-        .secret-download-btn::before {
+        .verify-btn::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.08), transparent);
-            animation: btnSweep 3s ease-in-out infinite;
+            background: linear-gradient(90deg, transparent, rgba(16,185,129,0.07), transparent);
+            animation: verifyBtnSweep 2.5s ease-in-out infinite;
+        }
+        @keyframes verifyBtnSweep {
+            0%   { transform: translateX(-100%) skewX(-10deg); }
+            100% { transform: translateX(250%) skewX(-10deg); }
         }
 
-        @keyframes btnSweep {
-            0% { transform: translateX(-100%) skewX(-15deg); }
-            100% { transform: translateX(200%) skewX(-15deg); }
+        @keyframes verifyGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(16,185,129,0.25), 0 0 30px rgba(16,185,129,0.1); }
+            50%       { box-shadow: 0 0 20px rgba(16,185,129,0.5), 0 0 60px rgba(16,185,129,0.2); }
         }
 
-        @keyframes secretGlow {
-            0%, 100% {
-                box-shadow:
-                    0 0 20px rgba(16,185,129,0.4),
-                    0 0 60px rgba(16,185,129,0.2),
-                    0 0 120px rgba(16,185,129,0.08),
-                    inset 0 0 20px rgba(16,185,129,0.05);
-            }
-            50% {
-                box-shadow:
-                    0 0 40px rgba(16,185,129,0.7),
-                    0 0 100px rgba(16,185,129,0.4),
-                    0 0 200px rgba(16,185,129,0.15),
-                    inset 0 0 30px rgba(16,185,129,0.1);
-            }
+        .verify-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.75);
+            transform: translateY(-1px);
         }
 
-        .secret-download-btn:hover {
-            transform: scale(1.05) translateY(-3px);
-            background: rgba(16, 185, 129, 0.22);
-            border-color: rgba(16, 185, 129, 0.9);
+        .verify-btn.loading {
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        .secret-download-btn:active {
-            transform: scale(0.98);
-        }
-
-        .secret-download-btn i {
-            font-size: 1.6rem;
-        }
-
-        /* Revealed state (after auto-scroll) - extra dramatic */
-        .secret-download-btn.revealed {
-            animation: secretGlowRevealed 1s ease-in-out infinite;
+        .verify-btn.revealed {
+            animation: verifyGlowRevealed 1s ease-in-out infinite;
             border-color: #10b981;
         }
 
-        @keyframes secretGlowRevealed {
-            0%, 100% {
-                box-shadow:
-                    0 0 60px rgba(16,185,129,0.8),
-                    0 0 120px rgba(16,185,129,0.5),
-                    0 0 240px rgba(16,185,129,0.2),
-                    inset 0 0 40px rgba(16,185,129,0.15);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow:
-                    0 0 80px rgba(16,185,129,1),
-                    0 0 160px rgba(16,185,129,0.7),
-                    0 0 300px rgba(16,185,129,0.3),
-                    inset 0 0 60px rgba(16,185,129,0.2);
-                transform: scale(1.03);
-            }
-        }
-
-        .secret-hint-text {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: rgba(16, 185, 129, 0.4);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        /* ====== LOADING SPINNER on button ====== */
-        .secret-download-btn.loading {
-            pointer-events: none;
-            color: rgba(16, 185, 129, 0.6);
+        @keyframes verifyGlowRevealed {
+            0%, 100% { box-shadow: 0 0 25px rgba(16,185,129,0.7), 0 0 60px rgba(16,185,129,0.3); transform: scale(1); }
+            50%       { box-shadow: 0 0 40px rgba(16,185,129,1), 0 0 90px rgba(16,185,129,0.5); transform: scale(1.02); }
         }
 
         /* ====== PAYMENT AMOUNT DISPLAY ====== */
@@ -372,23 +302,17 @@
                 <p class="upi-id-text">vssanjay11@ptyes</p>
             </div>
 
-            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; line-height: 1.6;">
+            <!-- Verify Button (inline, below QR) -->
+            <button class="verify-btn" id="secret-btn">
+                <i class="fas fa-cloud-arrow-down"></i>
+                Click Here to Download
+            </button>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 12px; line-height: 1.6;">
                 <i class="fas fa-lock" style="margin-right:5px;"></i>
                 Your offering is being monitored in real time. Please do not close this page.
             </p>
         </div>
-    </section>
-
-    <!-- ===================== DEEP SPACE SPACER (forces scrolling) ===================== -->
-    <div class="deep-space"></div>
-
-    <!-- ===================== SECRET BOTTOM SECTION ===================== -->
-    <section class="secret-section" id="secret-section">
-        <button class="secret-download-btn" id="secret-btn">
-            <i class="fas fa-cloud-arrow-down"></i>
-            Click Here to Download
-        </button>
-        <p class="secret-hint-text">Payment Verified Access</p>
     </section>
 
     <script>
@@ -459,23 +383,16 @@
             const pollInterval = setInterval(checkPaymentStatus, 5000);
             checkPaymentStatus(); // immediate first check
 
-            // ===== ON PAYMENT VERIFIED (auto-scroll to secret button) =====
+            // ===== ON PAYMENT VERIFIED (highlight the inline button) =====
             function onPaymentVerified() {
-                // Update status indicator
                 const dot = document.getElementById('status-dot');
                 const statusText = document.getElementById('status-text');
                 dot.style.background = '#10b981';
                 dot.style.animation = 'none';
-                statusText.textContent = '✅ Payment Confirmed! Scroll down to unlock...';
+                statusText.textContent = '✅ Payment Confirmed! Click the button below to unlock.';
 
-                // Swift smooth scroll to secret section
-                const secretSection = document.getElementById('secret-section');
-                secretSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                // After scroll completes, make button extra dramatic
-                setTimeout(() => {
-                    document.getElementById('secret-btn').classList.add('revealed');
-                }, 900);
+                // Make the inline button glow dramatically
+                document.getElementById('secret-btn').classList.add('revealed');
             }
 
             // ===== SECRET BUTTON CLICK =====
