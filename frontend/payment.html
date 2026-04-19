@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -242,7 +243,80 @@
             50%       { box-shadow: 0 0 40px rgba(16,185,129,1), 0 0 90px rgba(16,185,129,0.5); transform: scale(1.02); }
         }
 
-        /* ====== PAYMENT AMOUNT DISPLAY ====== */
+        /* ====== SUCCESS OVERLAY ====== */
+        .success-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(ellipse at 50% 40%, rgba(16,185,129,0.2), transparent 70%), rgba(5,5,20,0.92);
+            backdrop-filter: blur(8px);
+            animation: overlayFadeIn 0.5s ease forwards;
+        }
+
+        .success-overlay.active { display: flex; }
+
+        @keyframes overlayFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .success-overlay-card {
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            padding: 50px 35px;
+            border-color: rgba(16,185,129,0.4) !important;
+            box-shadow: 0 0 80px rgba(16,185,129,0.25), 0 0 160px rgba(16,185,129,0.1) !important;
+            animation: cardPop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes cardPop {
+            0%   { opacity: 0; transform: scale(0.6); }
+            70%  { transform: scale(1.06); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .overlay-icon {
+            font-size: 5rem;
+            color: #10b981;
+            animation: iconBounce 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+
+        @keyframes iconBounce {
+            0%  { transform: scale(0) rotate(-30deg); opacity: 0; }
+            70% { transform: scale(1.2) rotate(5deg); }
+            100%{ transform: scale(1) rotate(0); opacity: 1; }
+        }
+
+        .overlay-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            text-shadow: 0 0 30px rgba(255,215,0,0.4);
+            margin: 20px 0 10px;
+        }
+
+        .overlay-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+
+        /* Countdown ring in overlay */
+        .overlay-ring-wrap { position: relative; width: 80px; height: 80px; margin: 0 auto 10px; }
+        .overlay-ring-wrap svg { transform: rotate(-90deg); }
+        .o-ring-bg   { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 6; }
+        .o-ring-prog { fill: none; stroke: #10b981; stroke-width: 6; stroke-dasharray: 201; stroke-dashoffset: 0; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+        .o-ring-num  { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.8rem; font-weight:800; color:#10b981; }
+        .overlay-redir-label { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 1px; }
+
+        /* Balloons */
+        .balloon-fixed { position:fixed; border-radius:50%; pointer-events:none; z-index:6000; }
+        @keyframes floatUp { 0% { transform:translateY(0) rotate(0deg); opacity:.85; } 100% { transform:translateY(-120vh) rotate(25deg); opacity:0; } }
         .amount-display {
             font-size: 3rem;
             font-weight: 700;
@@ -314,6 +388,26 @@
             </p>
         </div>
     </section>
+
+    <!-- ====== SUCCESS OVERLAY (shown inline after verification) ====== -->
+    <div class="success-overlay" id="success-overlay">
+        <div class="balloon-layer" id="balloon-layer" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5500;"></div>
+        <div class="success-overlay-card glass-card">
+            <div style="width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,0.25),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto 5px;">
+                <i class="fas fa-heart-circle-check overlay-icon"></i>
+            </div>
+            <h2 class="overlay-title">Gratitude Received!</h2>
+            <p class="overlay-subtitle">Your spiritual offering has been accepted.<br>Your Enthiram is ready.</p>
+            <div class="overlay-ring-wrap">
+                <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle class="o-ring-bg"   cx="40" cy="40" r="32"/>
+                    <circle class="o-ring-prog" id="o-ring-prog" cx="40" cy="40" r="32"/>
+                </svg>
+                <span class="o-ring-num" id="o-ring-num">3</span>
+            </div>
+            <p class="overlay-redir-label">Redirecting to your Enthiram...</p>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -395,16 +489,80 @@
                 document.getElementById('secret-btn').classList.add('revealed');
             }
 
-            // ===== SECRET BUTTON CLICK =====
+            // ===== SHOW SUCCESS OVERLAY + CELEBRATE =====
+            function showSuccessAndRedirect() {
+                clearInterval(timerInterval);
+                clearInterval(pollInterval);
+
+                // Show overlay
+                const overlay = document.getElementById('success-overlay');
+                overlay.classList.add('active');
+
+                // Screen flash
+                const flash = document.createElement('div');
+                flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(16,185,129,0.22);z-index:7000;pointer-events:none;transition:opacity 0.5s ease-out;';
+                document.body.appendChild(flash);
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 500); }, 60);
+
+                // Confetti
+                const defaults = { origin: { y: 0.6 }, zIndex: 6500 };
+                const fire = (r, opts) => confetti({ ...defaults, ...opts, particleCount: Math.floor(200 * r) });
+                fire(0.25, { spread: 26, startVelocity: 55 });
+                fire(0.2,  { spread: 60 });
+                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+                fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+                fire(0.1,  { spread: 120, startVelocity: 45 });
+
+                // Firework finale
+                const endTime = Date.now() + 3200;
+                const fwInterval = setInterval(() => {
+                    const tl = endTime - Date.now();
+                    if (tl <= 0) return clearInterval(fwInterval);
+                    const pc = 50 * (tl / 3200);
+                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.1, y: Math.random()-0.2 } });
+                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.5, y: Math.random()-0.2 } });
+                }, 260);
+
+                // Emoji burst
+                const sc = 2;
+                confetti({ shapes: [confetti.shapeFromText({text:'🕉️',scalar:sc}), confetti.shapeFromText({text:'✨',scalar:sc}), confetti.shapeFromText({text:'🙏',scalar:sc})], particleCount: 45, spread: 90, origin: { y: 0.5 }, scalar: sc, zIndex: 6500 });
+
+                // Balloons
+                const layer = document.getElementById('balloon-layer');
+                const colors = ['#8a2be2','#00f2fe','#ffd700','#ff0080','#10b981','#f59e0b'];
+                for (let i = 0; i < 22; i++) {
+                    setTimeout(() => {
+                        const b = document.createElement('div');
+                        b.className = 'balloon-fixed';
+                        b.style.cssText = `bottom:-150px;left:${Math.random()*100}vw;width:${30+Math.random()*18}px;height:${40+Math.random()*18}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation:floatUp ${4+Math.random()*3}s linear forwards;`;
+                        layer.appendChild(b);
+                        setTimeout(() => b.remove(), 8000);
+                    }, i * 140);
+                }
+
+                // 3-second countdown then redirect to download.html
+                let count = 3;
+                const numEl = document.getElementById('o-ring-num');
+                const ring = document.getElementById('o-ring-prog');
+                const circum = 201;
+                ring.style.strokeDashoffset = 0;
+                const tick = setInterval(() => {
+                    count--;
+                    numEl.textContent = count;
+                    ring.style.strokeDashoffset = circum * (1 - count / 3);
+                    if (count <= 0) {
+                        clearInterval(tick);
+                        window.location.href = `/download.html?id=${numericId}`;
+                    }
+                }, 1000);
+            }
             const secretBtn = document.getElementById('secret-btn');
             secretBtn.addEventListener('click', async () => {
                 if (alreadyTriggered) {
-                    // Already verified via polling — just redirect
-                    window.location.href = `/success.html?id=${numericId}`;
+                    showSuccessAndRedirect();
                     return;
                 }
 
-                // Try to verify
                 secretBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
                 secretBtn.classList.add('loading');
 
@@ -418,17 +576,7 @@
 
                     if (data.success) {
                         alreadyTriggered = true;
-                        clearInterval(timerInterval);
-                        clearInterval(pollInterval);
-
-                        // Quick success flash on button
-                        secretBtn.innerHTML = '<i class="fas fa-check-circle"></i> Unlocked!';
-                        secretBtn.style.background = 'rgba(16, 185, 129, 0.3)';
-                        secretBtn.style.color = '#ffffff';
-
-                        setTimeout(() => {
-                            window.location.href = `/success.html?id=${numericId}`;
-                        }, 700);
+                        showSuccessAndRedirect();
                     } else {
                         secretBtn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i> Click Here to Download';
                         secretBtn.classList.remove('loading');
