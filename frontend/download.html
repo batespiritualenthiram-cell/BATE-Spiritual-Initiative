@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your Enthiram - BATE</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+            overflow-x: hidden;
+            background: radial-gradient(ellipse at 60% 20%, rgba(16, 185, 129, 0.12), transparent 60%),
+                        radial-gradient(ellipse at 20% 80%, rgba(138, 43, 226, 0.1), transparent 60%),
+                        var(--bg-dark);
+        }
+
+        .download-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .download-card {
+            max-width: 560px;
+            width: 100%;
+            text-align: center;
+            padding: 50px 40px;
+            position: relative;
+            animation: cardReveal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes cardReveal {
+            from { opacity: 0; transform: scale(0.9) translateY(40px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Loading State */
+        #loading-state, #verified-state, #blocked-state {
+            transition: opacity 0.4s ease;
+        }
+
+        /* Lotus icon animation */
+        .lotus-icon {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-emerald));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: lotusBloom 2s ease-out forwards, lotusFloat 4s 2s ease-in-out infinite;
+        }
+
+        @keyframes lotusBloom {
+            0%   { transform: scale(0) rotate(-30deg); opacity: 0; }
+            60%  { transform: scale(1.2) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        @keyframes lotusFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%      { transform: translateY(-12px); }
+        }
+
+        /* Golden glow orb behind icon */
+        .icon-aura {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(16,185,129,0.2), rgba(255,215,0,0.1), transparent 70%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: auraPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes auraPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(16,185,129,0.2), 0 0 60px rgba(255,215,0,0.06); }
+            50%       { box-shadow: 0 0 40px rgba(16,185,129,0.35), 0 0 100px rgba(255,215,0,0.12); }
+        }
+
+        /* Sanskrit ID badge */
+        .id-badge {
+            display: inline-block;
+            padding: 10px 24px;
+            background: rgba(255,215,0,0.08);
+            border: 1px solid rgba(255,215,0,0.25);
+            border-radius: 50px;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            letter-spacing: 3px;
+            margin: 15px 0;
+        }
+
+        /* Download button */
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            width: 100%;
+            padding: 22px;
+            margin-top: 25px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.4);
+            animation: downloadPulse 2.5s 1.5s ease-in-out infinite;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 50px rgba(16,185,129,0.5);
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes downloadPulse {
+            0%, 100% { box-shadow: 0 8px 30px rgba(16,185,129,0.35), 0 0 0 0 rgba(16,185,129,0.4); }
+            50%       { box-shadow: 0 8px 30px rgba(16,185,129,0.35), 0 0 0 20px rgba(16,185,129,0); }
+        }
+
+        .download-btn i {
+            font-size: 1.4rem;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 30px 0;
+        }
+
+        /* Blessing text */
+        .blessing-box {
+            padding: 20px;
+            background: rgba(16,185,129,0.05);
+            border-radius: 12px;
+            border: 1px dashed rgba(16,185,129,0.25);
+        }
+
+        /* Shimmer sweep */
+        .shimmer-sweep {
+            position: absolute;
+            top: 0; left: 0;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+            animation: sweepAnim 3s ease-in-out infinite;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        @keyframes sweepAnim {
+            0%   { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(250%) skewX(-15deg); }
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 50px; height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent-emerald);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Blocked state */
+        #blocked-state {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-dark">
+    <canvas id="star-canvas"></canvas>
+    <div class="fixed-bg"></div>
+
+    <div class="download-container">
+        <div class="download-card glass-card" id="download-card">
+            <div class="shimmer-sweep"></div>
+
+            <!-- LOADING STATE -->
+            <div id="loading-state">
+                <div class="spinner"></div>
+                <p style="color: var(--text-muted); margin-top: 10px;">Verifying your sacred offering...</p>
+            </div>
+
+            <!-- VERIFIED STATE (hidden until confirmed) -->
+            <div id="verified-state" style="display: none;">
+                <div class="icon-aura">
+                    <i class="fas fa-om lotus-icon"></i>
+                </div>
+
+                <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 10px;">
+                    Your <span style="background: linear-gradient(135deg, var(--accent-gold), var(--accent-emerald)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Enthiram</span> Awaits
+                </h1>
+
+                <p style="color: var(--text-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 10px;">
+                    Your offering has been accepted by the cosmos.<br>Your personal digital enthiram is ready.
+                </p>
+
+                <div class="id-badge" id="sanskrit-badge">—</div>
+
+                <div class="divider"></div>
+
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">
+                    <i class="fas fa-info-circle" style="color: var(--accent-purple-light); margin-right: 6px;"></i>
+                    Tap the button below to save your Enthiram to your device.
+                </p>
+
+                <a id="enthiram-download-btn" class="download-btn" href="assets/Enthiram_yantras.png" download="My_Enthiram_BATE.png">
+                    <i class="fas fa-cloud-arrow-down"></i>
+                    DOWNLOAD MY ENTHIRAM
+                </a>
+
+                <div class="divider"></div>
+
+                <div class="blessing-box">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">
+                        <i class="fas fa-lightbulb" style="color: var(--accent-emerald); margin-right: 8px;"></i>
+                        Set this as your home screen or wallpaper to carry its positive energy with you every day.
+                    </p>
+                </div>
+
+                <a href="/" style="display: inline-block; margin-top: 30px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid transparent; transition: all 0.3s ease;"
+                   onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--glass-border)'"
+                   onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='transparent'">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px; font-size: 0.8rem;"></i> Return to Main Page
+                </a>
+            </div>
+
+            <!-- BLOCKED STATE (Payment not verified) -->
+            <div id="blocked-state">
+                <div style="font-size: 4rem; color: #ef4444; margin-bottom: 20px;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h2 style="color: #ef4444; font-size: 1.8rem; margin-bottom: 15px;">Access Denied</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 25px;">
+                    We could not verify your payment for this Registration ID. Please complete the payment and validation first.
+                </p>
+                <a href="/" class="btn btn-primary btn-glow" style="display: inline-flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-arrow-left"></i> Go Back & Pay
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple star canvas (reuse logic)
+        (function() {
+            const canvas = document.getElementById('star-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const stars = Array.from({length: 150}, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.2 + 0.2, o: Math.random() * 0.5 + 0.1,
+                sp: Math.random() * 0.01 + 0.003, ph: Math.random() * Math.PI * 2
+            }));
+            function draw(t) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    const op = s.o * (0.6 + 0.4 * Math.sin(t * s.sp + s.ph));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${op})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+            window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        })();
+
+        // ===== MAIN: Verify Access =====
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const numericId = urlParams.get('id');
+
+            const loadingState = document.getElementById('loading-state');
+            const verifiedState = document.getElementById('verified-state');
+            const blockedState = document.getElementById('blocked-state');
+            const badge = document.getElementById('sanskrit-badge');
+            const downloadBtn = document.getElementById('enthiram-download-btn');
+
+            if (!numericId) {
+                loadingState.style.display = 'none';
+                blockedState.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/check-status/${numericId}`);
+                const data = await res.json();
+
+                loadingState.style.display = 'none';
+
+                if (data.verified) {
+                    // Show the download page
+                    verifiedState.style.display = 'block';
+                    // Set the personalized download filename
+                    downloadBtn.setAttribute('download', `Enthiram_${numericId}_BATE.png`);
+                    // Show numeric ID as Sanskrit-styled badge
+                    badge.textContent = `ID: ${numericId}`;
+                } else {
+                    blockedState.style.display = 'block';
+                }
+            } catch (err) {
+                loadingState.style.display = 'none';
+                blockedState.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Unsuccessful - BATE</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ===== FAILURE AESTHETIC ===== */
+        body {
+            overflow-x: hidden;
+            background: var(--bg-dark);
+            animation: bodyRedPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes bodyRedPulse {
+            0%, 100% { background: radial-gradient(ellipse at 50% 50%, rgba(239,68,68,0.08), transparent 70%), var(--bg-dark); }
+            50%       { background: radial-gradient(ellipse at 50% 50%, rgba(239,68,68,0.18), transparent 70%), var(--bg-dark); }
+        }
+
+        /* Red lightning streak effect */
+        .lightning-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .lightning-bolt {
+            position: absolute;
+            top: -5%;
+            width: 2px;
+            height: 60%;
+            background: linear-gradient(180deg, transparent, rgba(239,68,68,0.8), rgba(239,68,68,0.3), transparent);
+            filter: blur(1px);
+            opacity: 0;
+            animation: lightningStrike 4s ease-in-out infinite;
+        }
+
+        .lightning-bolt:nth-child(1) { left: 15%; animation-delay: 0s; }
+        .lightning-bolt:nth-child(2) { left: 38%; animation-delay: 1.3s; height: 40%; }
+        .lightning-bolt:nth-child(3) { left: 65%; animation-delay: 0.7s; }
+        .lightning-bolt:nth-child(4) { left: 85%; animation-delay: 2s; height: 50%; }
+
+        @keyframes lightningStrike {
+            0%, 90%, 100% { opacity: 0; transform: translateY(-10%) scaleX(1); }
+            5%, 10%        { opacity: 1; }
+            7%             { opacity: 0.4; transform: translateY(-5%) scaleX(1.5); }
+            8%             { opacity: 1; }
+        }
+
+        /* Red glow orbs */
+        .red-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.12;
+            animation: orbDrift 8s ease-in-out infinite alternate;
+        }
+
+        .red-orb:nth-child(1) {
+            width: 400px; height: 400px;
+            background: #ef4444;
+            top: -100px; right: -100px;
+        }
+
+        .red-orb:nth-child(2) {
+            width: 300px; height: 300px;
+            background: #7f1d1d;
+            bottom: -80px; left: -80px;
+            animation-delay: -4s;
+        }
+
+        @keyframes orbDrift {
+            from { opacity: 0.08; transform: scale(1); }
+            to   { opacity: 0.18; transform: scale(1.15); }
+        }
+
+        /* Card */
+        .failure-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .failure-card {
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            padding: 50px 40px;
+            position: relative;
+            border-color: rgba(239,68,68,0.3) !important;
+            box-shadow: 0 0 60px rgba(239,68,68,0.12), inset 0 0 40px rgba(239,68,68,0.04) !important;
+            animation: cardShakeIn 0.6s cubic-bezier(0.36,0.07,0.19,0.97) both;
+        }
+
+        @keyframes cardShakeIn {
+            0%   { opacity: 0; transform: scale(0.85) translateY(30px); }
+            40%  { opacity: 1; transform: scale(1.04) translateY(-5px); }
+            60%  { transform: scale(0.98) translateY(3px); }
+            80%  { transform: scale(1.01) translateY(-1px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        /* Failure icon */
+        .failure-icon-wrapper {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(239,68,68,0.2), rgba(127,29,29,0.1), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+            50%       { box-shadow: 0 0 0 20px rgba(239,68,68,0); }
+        }
+
+        .failure-icon {
+            font-size: 4rem;
+            color: #ef4444;
+            animation: iconShake 3s 0.6s ease-in-out infinite;
+        }
+
+        @keyframes iconShake {
+            0%, 90%, 100%  { transform: rotate(0deg); }
+            92% { transform: rotate(-5deg); }
+            94% { transform: rotate(5deg); }
+            96% { transform: rotate(-3deg); }
+            98% { transform: rotate(3deg); }
+        }
+
+        .failure-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ef4444;
+            margin-bottom: 12px;
+            text-shadow: 0 0 30px rgba(239,68,68,0.4);
+        }
+
+        .failure-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 380px;
+            margin: 0 auto 30px;
+        }
+
+        /* Error detail box */
+        .error-detail {
+            padding: 18px 22px;
+            background: rgba(239,68,68,0.07);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .error-detail p {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .error-detail i {
+            color: #ef4444;
+            width: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Divider */
+        .red-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(239,68,68,0.3), transparent);
+            margin: 25px 0;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-try-again {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 25px rgba(239,68,68,0.35);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-try-again:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 40px rgba(239,68,68,0.5);
+        }
+
+        .btn-exit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(239,68,68,0.06);
+            color: #a0a0a0;
+            border: 1px solid rgba(239,68,68,0.15);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-exit:hover {
+            background: rgba(239,68,68,0.12);
+            color: #ef4444;
+            border-color: rgba(239,68,68,0.35);
+        }
+
+        /* Crack/static overlay for dramatic effect */
+        .static-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: inherit;
+            background-image: 
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(239,68,68,0.015) 2px,
+                    rgba(239,68,68,0.015) 4px
+                );
+            pointer-events: none;
+            opacity: 0;
+            animation: staticFlicker 5s ease-in-out infinite;
+        }
+
+        @keyframes staticFlicker {
+            0%, 40%, 60%, 100% { opacity: 0; }
+            50%, 55% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-dark">
+    <!-- Star Canvas -->
+    <canvas id="star-canvas"></canvas>
+    <div class="fixed-bg"></div>
+
+    <!-- Red Lightning Bolts -->
+    <div class="lightning-container">
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+        <div class="lightning-bolt"></div>
+    </div>
+
+    <!-- Red Glowing Orbs -->
+    <div class="red-orb"></div>
+    <div class="red-orb"></div>
+
+    <div class="failure-container">
+        <div class="failure-card glass-card" id="failure-card">
+            <div class="static-overlay"></div>
+
+            <!-- Icon -->
+            <div class="failure-icon-wrapper">
+                <i class="fas fa-circle-xmark failure-icon"></i>
+            </div>
+
+            <!-- Title -->
+            <h1 class="failure-title">Payment Unsuccessful</h1>
+            <p class="failure-subtitle">
+                We could not confirm your payment at this time. This could be due to a cancellation, network issue, or an incomplete transaction.
+            </p>
+
+            <!-- Error Detail -->
+            <div class="error-detail">
+                <p><i class="fas fa-ban"></i> Payment was cancelled or not completed.</p>
+                <p><i class="fas fa-wifi"></i> A network error may have occurred.</p>
+                <p><i class="fas fa-clock"></i> The transaction may have timed out.</p>
+            </div>
+
+            <div class="red-divider"></div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/payment.html" class="btn-try-again">
+                    <i class="fas fa-rotate-right"></i>
+                    TRY AGAIN
+                </a>
+                <a href="/" class="btn-exit">
+                    <i class="fas fa-right-from-bracket"></i>
+                    Exit to Home
+                </a>
+            </div>
+
+            <p style="margin-top: 25px; font-size: 0.75rem; color: var(--text-muted);">
+                <i class="fas fa-headset" style="margin-right: 6px;"></i>
+                Need help? Contact us at 
+                <a href="mailto:bate.spiritual.enthiram@gmail.com" style="color: var(--accent-purple-light); text-decoration: none;">bate.spiritual.enthiram@gmail.com</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Lightweight star background
+        (function() {
+            const canvas = document.getElementById('star-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const stars = Array.from({length: 100}, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.0 + 0.2, o: Math.random() * 0.3 + 0.05,
+                sp: Math.random() * 0.01 + 0.003, ph: Math.random() * Math.PI * 2
+            }));
+            function draw(t) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    const op = s.o * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
+                    // Tint stars slightly red for atmosphere
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,180,180,${op})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+            window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        })();
+    </script>
+</body>
+</html>

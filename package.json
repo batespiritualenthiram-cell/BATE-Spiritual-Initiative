@@ -8,6 +8,10 @@
     "install-all": "cd backend && npm install",
     "build": "npm run install-all"
   },
+  "dependencies": {
+    "pg": "^8.11.3",
+    "node-fetch": "^2.7.0"
+  },
   "engines": {
     "node": ">=14.0.0"
   },

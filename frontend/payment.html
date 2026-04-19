@@ -9,30 +9,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Link to Main Styles -->
+    <!-- Main Styles -->
     <link rel="stylesheet" href="styles.css">
-
-    <!-- Confetti Library -->
+    <!-- Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root {
             --success-glow: rgba(16, 185, 129, 0.4);
-            --error-glow: rgba(239, 68, 68, 0.4);
         }
 
         body {
-            transition: background 0.8s ease, box-shadow 0.8s ease;
+            transition: background 0.8s ease;
             overflow-x: hidden;
         }
 
-        /* Success/Failure States */
         body.payment-success {
             background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15), transparent 70%), var(--bg-dark);
-        }
-        body.payment-failure {
-            box-shadow: inset 0 0 100px var(--error-glow);
         }
 
         .payment-container {
@@ -41,7 +34,6 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            perspective: 1000px;
         }
 
         .payment-card {
@@ -51,12 +43,11 @@
             padding: 40px;
             position: relative;
             transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-            transform-style: preserve-3d;
         }
 
         .payment-card.success {
             border-color: var(--accent-emerald);
-            box-shadow: 0 0 30px var(--success-glow);
+            box-shadow: 0 0 40px var(--success-glow);
             transform: scale(1.02);
         }
 
@@ -81,9 +72,8 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
+            0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
         }
 
         .qr-section {
@@ -128,13 +118,65 @@
             box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
         }
 
+        /* Countdown redirect ring */
+        .redirect-countdown {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 25px 0 15px;
+        }
+
+        .countdown-ring {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        .countdown-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .countdown-ring circle {
+            fill: none;
+            stroke-width: 5;
+        }
+
+        .countdown-ring .bg-ring {
+            stroke: rgba(255,255,255,0.1);
+        }
+
+        .countdown-ring .progress-ring {
+            stroke: var(--accent-emerald);
+            stroke-dasharray: 188;
+            stroke-dashoffset: 0;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .countdown-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-emerald);
+        }
+
+        .countdown-label {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Success Section */
         #checkout-section, #success-section {
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
         /* Balloon Animation */
         .balloon {
-            position: absolute;
+            position: fixed;
             bottom: -150px;
             width: 40px;
             height: 50px;
@@ -202,16 +244,19 @@
                 </div>
 
                 <div class="verification-box">
-                    <h3 style="font-size: 1.2rem; margin-bottom: 15px; color: var(--text-primary);">Verification Required</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">Enter your User ID after successful payment</p>
-                    <input type="text" id="verify-id-input" class="verification-input" placeholder="User ID">
+                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--text-primary);">Verify Your Payment</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">After paying, click "Validate" below to confirm your offering and unlock the download.</p>
+                    <input type="text" id="verify-id-input" class="verification-input" placeholder="Your Registration ID">
                     <button id="verify-btn" class="btn btn-outline" style="width: 100%; padding: 15px; font-weight: 600;">
                         <i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK
                     </button>
                     <div id="verify-error-box" style="display: none; margin-top: 15px; padding: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
                         <p id="verify-error" style="color: #ff6b6b; font-size: 0.9rem; margin-bottom: 5px;"></p>
-                        <p style="color: var(--text-muted); font-size: 0.75rem;"><i class="fas fa-info-circle"></i> Recommendation: Double-check your Numeric ID from the home page.</p>
+                        <p style="color: var(--text-muted); font-size: 0.75rem;"><i class="fas fa-info-circle"></i> Ensure you have paid successfully and your Registration ID is correct.</p>
                     </div>
+                    <button id="payment-failed-btn" class="btn" style="margin-top: 15px; width:100%; padding: 12px; background: rgba(239,68,68,0.08); color: #a0a0a0; border: 1px solid rgba(239,68,68,0.15); border-radius: 10px; cursor:pointer; font-size: 0.9rem;">
+                        <i class="fas fa-times-circle" style="margin-right: 8px; color:#ef4444;"></i> Payment Failed / I want to Cancel
+                    </button>
                 </div>
             </div>
 
@@ -221,32 +266,23 @@
                     <i class="fas fa-heart-circle-check"></i>
                 </div>
                 <h2 style="font-size: 2.2rem; margin-bottom: 10px; color: var(--accent-gold); font-weight: 700;">Gratitude Received!</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.15rem; line-height: 1.6;">Your spiritual offering has been verified.</p>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.15rem; line-height: 1.6;">Your spiritual offering has been accepted. Your Enthiram awaits you.</p>
                 
-                <!-- PIN REVEAL BOX -->
-                <div style="margin: 20px 0; padding: 25px; background: rgba(16, 185, 129, 0.1); border-radius: 15px; border: 2px solid var(--accent-emerald); position: relative; overflow: hidden;">
-                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.15), transparent); animation: sweep 2s infinite;"></div>
-                    <p style="font-size: 0.9rem; color: var(--accent-emerald); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Sacred Unlock PIN Revealed</p>
-                    <p style="font-size: 4rem; color: white; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.4); margin: 0;">11</p>
+                <!-- Countdown Ring -->
+                <div class="redirect-countdown">
+                    <div class="countdown-ring">
+                        <svg width="70" height="70" viewBox="0 0 70 70">
+                            <circle class="bg-ring" cx="35" cy="35" r="30"/>
+                            <circle class="progress-ring" id="progress-ring" cx="35" cy="35" r="30"/>
+                        </svg>
+                        <span class="countdown-number" id="countdown-number">3</span>
+                    </div>
+                    <p class="countdown-label">Redirecting to your Enthiram download...</p>
                 </div>
 
-                <div style="margin-bottom: 30px;">
-                    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 12px;">Enter the Secret PIN above to unlock your Enhtiram</p>
-                    <input type="text" id="secret-pin-input" class="verification-input" placeholder="PIN" style="max-width: 150px; border-color: var(--accent-emerald); background: rgba(0,0,0,0.5); font-size: 2.5rem; letter-spacing: 8px; margin: 0 auto 20px auto;">
-                    
-                    <a id="download-link" href="assets/Enthiram_yantras.png" download="My_Enthiram.png" class="btn btn-primary" style="display: flex; align-items: center; justify-content: center; font-size: 1.2rem; padding: 20px; width: 100%; pointer-events: none; opacity: 0.4; filter: grayscale(1); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-                        <i class="fas fa-lock" id="download-lock-icon" style="margin-right: 12px;"></i> 
-                        <span id="download-btn-text">LOCKED — ENTER PIN</span>
-                    </a>
-                </div>
-                
-                <div style="margin-top: 30px; padding: 20px; background: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px dashed var(--accent-emerald);">
+                <div style="margin: 20px 0; padding: 20px; background: rgba(16, 185, 129, 0.08); border-radius: 12px; border: 1px dashed var(--accent-emerald);">
                     <p style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fas fa-lightbulb" style="color: var(--accent-emerald); margin-right: 8px;"></i> Keep this symbol on your home screen for positive energy and mental clarity.</p>
                 </div>
-
-                <a href="/" style="display: inline-block; margin-top: 35px; color: var(--text-muted); text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.3s ease;" onmouseover="this.style.color='var(--text-primary)'; this.style.borderColor='var(--glass-border)'" onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='transparent'">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px; font-size: 0.8rem;"></i> Return to Main Page
-                </a>
             </div>
 
         </div>
@@ -267,94 +303,99 @@
             const errorText = document.getElementById('verify-error');
             const verifyBtn = document.getElementById('verify-btn');
             const qrImage = document.getElementById('qr-image');
+            const failedBtn = document.getElementById('payment-failed-btn');
 
             if (userNumericId) inputField.value = userNumericId;
             if (qrImage) {
                 qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}&color=000000&bgcolor=ffffff`;
             }
 
+            // Redirect to failure page
+            failedBtn.addEventListener('click', () => {
+                window.location.href = '/failure.html';
+            });
+
+            // ===== CELEBRATION ANIMATIONS =====
             const celebrateSuccess = () => {
                 document.body.classList.add('payment-success');
                 card.classList.add('success');
                 
-                // 0. Screen Flash Effect
+                // Flash effect
                 const flash = document.createElement('div');
-                flash.style.position = 'fixed';
-                flash.style.top = '0';
-                flash.style.left = '0';
-                flash.style.width = '100vw';
-                flash.style.height = '100vh';
-                flash.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
-                flash.style.zIndex = '2000';
-                flash.style.pointerEvents = 'none';
-                flash.style.transition = 'opacity 0.5s ease-out';
+                flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.4);z-index:2000;pointer-events:none;transition:opacity 0.5s ease-out;';
                 document.body.appendChild(flash);
-                setTimeout(() => {
-                    flash.style.opacity = '0';
-                    setTimeout(() => flash.remove(), 500);
-                }, 50);
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 500); }, 50);
 
-                // 1. Confetti Explosion (Multi-burst)
+                // Confetti burst
                 const count = 200;
                 const defaults = { origin: { y: 0.7 }, zIndex: 1100 };
-
-                const fire = (particleRatio, opts) => {
-                    confetti({
-                        ...defaults,
-                        ...opts,
-                        particleCount: Math.floor(count * particleRatio)
-                    });
-                };
-
+                const fire = (r, opts) => confetti({ ...defaults, ...opts, particleCount: Math.floor(count * r) });
                 fire(0.25, { spread: 26, startVelocity: 55 });
                 fire(0.2, { spread: 60 });
                 fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
                 fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
                 fire(0.1, { spread: 120, startVelocity: 45 });
 
-                // 2. Firework Finale (Repeated bursts)
+                // Firework finale
                 let duration = 3 * 1000;
-                let animationEnd = Date.now() + duration;
-                let interval = setInterval(function() {
-                    let timeLeft = animationEnd - Date.now();
+                let animEnd = Date.now() + duration;
+                let interval = setInterval(() => {
+                    let timeLeft = animEnd - Date.now();
                     if (timeLeft <= 0) return clearInterval(interval);
-                    let particleCount = 50 * (timeLeft / duration);
-                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4 + 0.1, y: Math.random() - 0.2 } }));
-                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random() * 0.4 + 0.5, y: Math.random() - 0.2 } }));
+                    let pc = 50 * (timeLeft / duration);
+                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.1, y: Math.random()-0.2 } });
+                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.5, y: Math.random()-0.2 } });
                 }, 250);
 
-                // 3. Emoji Burst
+                // Emoji burst
                 const scalar = 2;
-                const lotus = confetti.shapeFromText({ text: '🕉️', scalar });
-                const star = confetti.shapeFromText({ text: '✨', scalar });
-                const heart = confetti.shapeFromText({ text: '❤️', scalar });
-                const prayer = confetti.shapeFromText({ text: '🙏', scalar });
-
                 confetti({
-                    shapes: [lotus, star, heart, prayer],
-                    particleCount: 40,
-                    spread: 80,
-                    origin: { y: 0.6 },
-                    scalar
+                    shapes: [
+                        confetti.shapeFromText({ text: '🕉️', scalar }),
+                        confetti.shapeFromText({ text: '✨', scalar }),
+                        confetti.shapeFromText({ text: '🙏', scalar })
+                    ],
+                    particleCount: 40, spread: 80, origin: { y: 0.6 }, scalar
                 });
 
-                // 4. Balloons Floating up
+                // Balloons
                 const balloonContainer = document.getElementById('balloon-container');
-                const colors = ['#8a2be2', '#00f2fe', '#ffd700', '#ff0080', '#10b981'];
-                
+                const colors = ['#8a2be2','#00f2fe','#ffd700','#ff0080','#10b981'];
                 for(let i=0; i<20; i++) {
                     setTimeout(() => {
-                        const balloon = document.createElement('div');
-                        balloon.className = 'balloon';
-                        balloon.style.left = Math.random() * 100 + 'vw';
-                        balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                        balloon.style.animation = `floatUp ${4 + Math.random() * 3}s linear forwards`;
-                        balloonContainer.appendChild(balloon);
-                        setTimeout(() => balloon.remove(), 7000);
-                    }, i * 150);
+                        const b = document.createElement('div');
+                        b.className = 'balloon';
+                        b.style.left = Math.random()*100 + 'vw';
+                        b.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+                        b.style.animation = `floatUp ${4+Math.random()*3}s linear forwards`;
+                        balloonContainer.appendChild(b);
+                        setTimeout(() => b.remove(), 7000);
+                    }, i*150);
                 }
             };
 
+            // ===== 3-SECOND COUNTDOWN REDIRECT =====
+            function startCountdownRedirect(numericId) {
+                let countdown = 3;
+                const numEl = document.getElementById('countdown-number');
+                const ring = document.getElementById('progress-ring');
+                const circumference = 188; // 2 * PI * 30
+
+                ring.style.strokeDashoffset = 0;
+
+                const tick = setInterval(() => {
+                    countdown--;
+                    numEl.textContent = countdown;
+                    ring.style.strokeDashoffset = circumference * (1 - countdown / 3);
+
+                    if (countdown <= 0) {
+                        clearInterval(tick);
+                        window.location.href = `/download.html?id=${numericId}`;
+                    }
+                }, 1000);
+            }
+
+            // ===== VERIFY BUTTON =====
             verifyBtn.addEventListener('click', async () => {
                 const numericId = inputField.value.trim();
                 
@@ -365,7 +406,6 @@
                 }
 
                 errorBox.style.display = 'none';
-                document.body.classList.remove('payment-failure');
                 verifyBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> VERIFYING...';
                 verifyBtn.disabled = true;
 
@@ -379,7 +419,7 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        // Switch UI
+                        // Show success section
                         const checkout = document.getElementById('checkout-section');
                         const success = document.getElementById('success-section');
                         
@@ -393,16 +433,14 @@
                                 success.style.opacity = '1';
                                 success.style.transform = 'translateY(0)';
                                 celebrateSuccess();
+                                startCountdownRedirect(numericId);
                             }, 50);
                         }, 500);
 
-                        document.getElementById('download-link').download = `Enthiram_${numericId}.png`;
                     } else {
-                        // Failure Logic
-                        document.body.classList.add('payment-failure');
+                        // Verification failure — shake and show error
                         card.classList.add('shake');
                         setTimeout(() => card.classList.remove('shake'), 500);
-                        
                         verifyBtn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK';
                         verifyBtn.disabled = false;
                         errorText.textContent = data.error || "Entry Not Found";
@@ -411,38 +449,8 @@
                 } catch (err) {
                     verifyBtn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK';
                     verifyBtn.disabled = false;
-                    errorText.textContent = "Connection Failure. Check internet.";
+                    errorText.textContent = "Connection Failure. Check your internet.";
                     errorBox.style.display = 'block';
-                }
-            });
-
-            // --- SECRET PIN LOGIC ---
-            const pinInput = document.getElementById('secret-pin-input');
-            const downloadBtn = document.getElementById('download-link');
-            const downloadIcon = document.getElementById('download-lock-icon');
-            const downloadText = document.getElementById('download-btn-text');
-
-            pinInput.addEventListener('input', (e) => {
-                if (e.target.value === '11') {
-                    // Unlock!
-                    downloadBtn.style.pointerEvents = 'auto';
-                    downloadBtn.style.opacity = '1';
-                    downloadBtn.style.filter = 'none';
-                    downloadBtn.classList.add('btn-glow');
-                    downloadIcon.className = 'fas fa-cloud-arrow-down';
-                    downloadText.textContent = 'DOWNLOAD MY ENTHIRAM';
-                    
-                    // Simple success feedback
-                    pinInput.style.borderColor = 'var(--accent-emerald)';
-                    pinInput.style.boxShadow = '0 0 20px var(--accent-emerald)';
-                } else {
-                    // Keep locked
-                    downloadBtn.style.pointerEvents = 'none';
-                    downloadBtn.style.opacity = '0.4';
-                    downloadBtn.style.filter = 'grayscale(1)';
-                    downloadBtn.classList.remove('btn-glow');
-                    downloadIcon.className = 'fas fa-lock';
-                    downloadText.textContent = 'LOCKED — ENTER PIN';
                 }
             });
         });

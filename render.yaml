@@ -1,3 +1,9 @@
+databases:
+  - name: bate-db
+    databaseName: bate_spiritual
+    user: bate_user
+    plan: free
+
 services:
   - type: web
     name: bate-spiritual-initiative
@@ -7,3 +13,9 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bate-db
+          property: connectionString
+      - key: RENDER_EXTERNAL_URL
+        sync: false
