@@ -3,457 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Offering - BATE</title>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Noto+Sans+Devanagari:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
+    <title>Complete Your Offering - BATE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800&family=Noto+Sans+Devanagari:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Main Styles -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root {
-            --success-glow: rgba(16, 185, 129, 0.4);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            transition: background 0.8s ease;
+            font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
+            background: var(--bg-dark);
         }
 
-        body.payment-success {
-            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.15), transparent 70%), var(--bg-dark);
-        }
-
-        .payment-container {
+        /* ====== MAIN PAYMENT SECTION (above fold) ====== */
+        .payment-main {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .payment-card {
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
+            padding: 40px 35px;
             text-align: center;
-            padding: 40px;
             position: relative;
-            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
-        .payment-card.success {
-            border-color: var(--accent-emerald);
-            box-shadow: 0 0 40px var(--success-glow);
-            transform: scale(1.02);
+        /* ====== 5-MIN COUNTDOWN TIMER ====== */
+        .timer-wrapper {
+            margin: 25px 0;
+            position: relative;
         }
 
-        .payment-card.shake {
-            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        .timer-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
         }
 
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(2px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-            40%, 60% { transform: translate3d(4px, 0, 0); }
-        }
-
-        .payment-amount {
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin: 20px 0;
-            text-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-        }
-
-        .qr-section {
-            margin: 30px 0;
-            padding: 25px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 15px;
-            border: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
-        }
-
-        .qr-section:hover {
-            background: rgba(255,255,255,0.05);
-            border-color: var(--accent-purple-light);
-        }
-
-        .verification-box {
-            margin-top: 30px;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 30px;
-        }
-
-        .verification-input {
-            width: 100%;
-            padding: 18px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid var(--glass-border);
-            border-radius: 12px;
-            color: white;
-            font-size: 1.4rem;
-            text-align: center;
-            margin-bottom: 15px;
+        .timer-display {
+            font-size: 4rem;
+            font-weight: 800;
             letter-spacing: 4px;
-            font-family: 'Outfit', sans-serif;
+            font-variant-numeric: tabular-nums;
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             transition: all 0.3s ease;
+            line-height: 1;
         }
 
-        .verification-input:focus {
-            outline: none;
-            border-color: var(--accent-purple);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        .timer-display.urgent {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: timerUrgentPulse 0.5s ease-in-out infinite;
         }
 
-        /* Countdown redirect ring */
-        .redirect-countdown {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 25px 0 15px;
+        @keyframes timerUrgentPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
-        .countdown-ring {
-            position: relative;
-            width: 70px;
-            height: 70px;
-        }
-
-        .countdown-ring svg {
-            transform: rotate(-90deg);
-        }
-
-        .countdown-ring circle {
-            fill: none;
-            stroke-width: 5;
-        }
-
-        .countdown-ring .bg-ring {
-            stroke: rgba(255,255,255,0.1);
-        }
-
-        .countdown-ring .progress-ring {
-            stroke: var(--accent-emerald);
-            stroke-dasharray: 188;
-            stroke-dashoffset: 0;
-            stroke-linecap: round;
-            transition: stroke-dashoffset 1s linear;
-        }
-
-        .countdown-number {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--accent-emerald);
-        }
-
-        .countdown-label {
+        .timer-bar-wrapper {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 2px;
             margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+            border-radius: 2px;
+            transform-origin: left;
+            transition: width 1s linear;
+        }
+
+        /* ====== STATUS INDICATOR ====== */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            margin: 20px 0;
             font-size: 0.85rem;
             color: var(--text-muted);
         }
 
-        /* Success Section */
-        #checkout-section, #success-section {
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        /* Balloon Animation */
-        .balloon {
-            position: fixed;
-            bottom: -150px;
-            width: 40px;
-            height: 50px;
+        .status-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
-            z-index: 1000;
+            background: #f59e0b;
+            animation: statusPulse 1.5s ease-in-out infinite;
+            flex-shrink: 0;
         }
 
-        .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            width: 2px;
-            height: 50px;
-            background: rgba(255,255,255,0.3);
-            transform: translateX(-50%);
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
-            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        /* ====== QR SECTION ====== */
+        .qr-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
         }
 
-        @keyframes sweep {
-            0% { transform: translateX(-100%) skewX(-20deg); }
-            100% { transform: translateX(200%) skewX(-20deg); }
+        .qr-frame {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .qr-frame img {
+            width: 170px;
+            height: 170px;
+            display: block;
+        }
+
+        .upi-pay-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 17px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(90, 20, 180, 0.9));
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-bottom: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 25px rgba(138, 43, 226, 0.3);
+        }
+
+        .upi-pay-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 35px rgba(138, 43, 226, 0.5);
+        }
+
+        .upi-id-text {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            letter-spacing: 1.5px;
+            margin-top: 8px;
         }
 
         .desktop-only { display: none; }
-        @media (min-width: 768px) {
-            .desktop-only { display: block; }
+        @media (min-width: 768px) { .desktop-only { display: block; } }
+
+        /* ====== DEEP SPACE SPACER (forces scrolling) ====== */
+        .deep-space {
+            height: 260vh;
+            position: relative;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(5, 5, 20, 0.3) 30%,
+                rgba(5, 5, 20, 0.6) 70%,
+                rgba(5, 5, 20, 0.8) 100%
+            );
+            pointer-events: none;
+        }
+
+        /* ====== SECRET BOTTOM SECTION ====== */
+        .secret-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+        }
+
+        /* The glowing green secret download button */
+        .secret-download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 28px 60px;
+            background: rgba(16, 185, 129, 0.12);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 2px solid rgba(16, 185, 129, 0.55);
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #10b981;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: secretGlow 2.5s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secret-download-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.08), transparent);
+            animation: btnSweep 3s ease-in-out infinite;
+        }
+
+        @keyframes btnSweep {
+            0% { transform: translateX(-100%) skewX(-15deg); }
+            100% { transform: translateX(200%) skewX(-15deg); }
+        }
+
+        @keyframes secretGlow {
+            0%, 100% {
+                box-shadow:
+                    0 0 20px rgba(16,185,129,0.4),
+                    0 0 60px rgba(16,185,129,0.2),
+                    0 0 120px rgba(16,185,129,0.08),
+                    inset 0 0 20px rgba(16,185,129,0.05);
+            }
+            50% {
+                box-shadow:
+                    0 0 40px rgba(16,185,129,0.7),
+                    0 0 100px rgba(16,185,129,0.4),
+                    0 0 200px rgba(16,185,129,0.15),
+                    inset 0 0 30px rgba(16,185,129,0.1);
+            }
+        }
+
+        .secret-download-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: rgba(16, 185, 129, 0.22);
+            border-color: rgba(16, 185, 129, 0.9);
+        }
+
+        .secret-download-btn:active {
+            transform: scale(0.98);
+        }
+
+        .secret-download-btn i {
+            font-size: 1.6rem;
+        }
+
+        /* Revealed state (after auto-scroll) - extra dramatic */
+        .secret-download-btn.revealed {
+            animation: secretGlowRevealed 1s ease-in-out infinite;
+            border-color: #10b981;
+        }
+
+        @keyframes secretGlowRevealed {
+            0%, 100% {
+                box-shadow:
+                    0 0 60px rgba(16,185,129,0.8),
+                    0 0 120px rgba(16,185,129,0.5),
+                    0 0 240px rgba(16,185,129,0.2),
+                    inset 0 0 40px rgba(16,185,129,0.15);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow:
+                    0 0 80px rgba(16,185,129,1),
+                    0 0 160px rgba(16,185,129,0.7),
+                    0 0 300px rgba(16,185,129,0.3),
+                    inset 0 0 60px rgba(16,185,129,0.2);
+                transform: scale(1.03);
+            }
+        }
+
+        .secret-hint-text {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: rgba(16, 185, 129, 0.4);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* ====== LOADING SPINNER on button ====== */
+        .secret-download-btn.loading {
+            pointer-events: none;
+            color: rgba(16, 185, 129, 0.6);
+        }
+
+        /* ====== PAYMENT AMOUNT DISPLAY ====== */
+        .amount-display {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
+            margin: 10px 0;
         }
     </style>
 </head>
 <body class="bg-dark">
-    <!-- Star Background -->
     <canvas id="star-canvas"></canvas>
     <div class="fixed-bg"></div>
 
-    <div class="payment-container">
-        <div class="payment-card glass-card" id="payment-card">
-            
-            <!-- STEP 1: CHECKOUT -->
-            <div id="checkout-section">
-                <div class="icon-header" style="font-size: 3.5rem; margin-bottom: 20px; color: var(--accent-purple-light);">
-                    <i class="fas fa-om"></i>
-                </div>
-                <h2 style="font-size: 2rem; margin-bottom: 10px; font-weight: 700;">Spiritual Offering</h2>
-                <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto;">Secure your symbolic energy exchange to unlock your personalized digital Enthiram.</p>
-                
-                <div class="payment-amount">₹10</div>
+    <!-- ===================== MAIN SECTION (ABOVE FOLD) ===================== -->
+    <section class="payment-main">
+        <div class="payment-card glass-card">
 
-                <a href="upi://pay?pa=vssanjay11@ptyes&pn=Sanjay&am=10&cu=INR&tn=Enthiram Offering" class="btn btn-primary btn-glow" style="display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 15px; padding: 18px; font-size: 1.1rem;">
-                    <i class="fas fa-mobile-alt" style="margin-right: 12px;"></i> Pay with UPI App (Mobile)
-                </a>
+            <div style="font-size: 3rem; color: var(--accent-purple-light); margin-bottom: 15px;">
+                <i class="fas fa-om"></i>
+            </div>
 
-                <div class="desktop-only qr-section">
-                    <p style="margin-bottom: 15px; font-size: 0.95rem; color: var(--text-muted);">Browsing on Desktop? Scan to Pay</p>
-                    <div style="background: white; padding: 10px; border-radius: 15px; display: inline-block;">
-                        <img id="qr-image" src="" alt="UPI QR Code" style="width: 180px; display: block;">
-                    </div>
-                    <p id="upi-id-display" style="margin-top: 15px; font-weight: 500; letter-spacing: 1px; color: var(--accent-gold);">vssanjay11@ptyes</p>
-                </div>
+            <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 5px;">Spiritual Offering</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 5px;">Scan the QR or tap the button below to complete your sacred exchange</p>
 
-                <div class="verification-box">
-                    <h3 style="font-size: 1.2rem; margin-bottom: 10px; color: var(--text-primary);">Verify Your Payment</h3>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">After paying, click "Validate" below to confirm your offering and unlock the download.</p>
-                    <input type="text" id="verify-id-input" class="verification-input" placeholder="Your Registration ID">
-                    <button id="verify-btn" class="btn btn-outline" style="width: 100%; padding: 15px; font-weight: 600;">
-                        <i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK
-                    </button>
-                    <div id="verify-error-box" style="display: none; margin-top: 15px; padding: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px;">
-                        <p id="verify-error" style="color: #ff6b6b; font-size: 0.9rem; margin-bottom: 5px;"></p>
-                        <p style="color: var(--text-muted); font-size: 0.75rem;"><i class="fas fa-info-circle"></i> Ensure you have paid successfully and your Registration ID is correct.</p>
-                    </div>
-                    <button id="payment-failed-btn" class="btn" style="margin-top: 15px; width:100%; padding: 12px; background: rgba(239,68,68,0.08); color: #a0a0a0; border: 1px solid rgba(239,68,68,0.15); border-radius: 10px; cursor:pointer; font-size: 0.9rem;">
-                        <i class="fas fa-times-circle" style="margin-right: 8px; color:#ef4444;"></i> Payment Failed / I want to Cancel
-                    </button>
+            <div class="amount-display">₹10</div>
+
+            <!-- 5-Minute Countdown Timer -->
+            <div class="timer-wrapper">
+                <p class="timer-label">Time Remaining</p>
+                <div class="timer-display" id="timer-display">05:00</div>
+                <div class="timer-bar-wrapper">
+                    <div class="timer-bar" id="timer-bar"></div>
                 </div>
             </div>
 
-            <!-- STEP 2: SUCCESS -->
-            <div id="success-section" style="display: none; opacity: 0; transform: translateY(20px);">
-                <div style="font-size: 5rem; color: var(--accent-emerald); margin-bottom: 25px;">
-                    <i class="fas fa-heart-circle-check"></i>
-                </div>
-                <h2 style="font-size: 2.2rem; margin-bottom: 10px; color: var(--accent-gold); font-weight: 700;">Gratitude Received!</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 1.15rem; line-height: 1.6;">Your spiritual offering has been accepted. Your Enthiram awaits you.</p>
-                
-                <!-- Countdown Ring -->
-                <div class="redirect-countdown">
-                    <div class="countdown-ring">
-                        <svg width="70" height="70" viewBox="0 0 70 70">
-                            <circle class="bg-ring" cx="35" cy="35" r="30"/>
-                            <circle class="progress-ring" id="progress-ring" cx="35" cy="35" r="30"/>
-                        </svg>
-                        <span class="countdown-number" id="countdown-number">3</span>
-                    </div>
-                    <p class="countdown-label">Redirecting to your Enthiram download...</p>
-                </div>
-
-                <div style="margin: 20px 0; padding: 20px; background: rgba(16, 185, 129, 0.08); border-radius: 12px; border: 1px dashed var(--accent-emerald);">
-                    <p style="font-size: 0.9rem; color: var(--text-secondary);"><i class="fas fa-lightbulb" style="color: var(--accent-emerald); margin-right: 8px;"></i> Keep this symbol on your home screen for positive energy and mental clarity.</p>
-                </div>
+            <!-- Status -->
+            <div class="status-indicator" id="status-indicator">
+                <div class="status-dot" id="status-dot"></div>
+                <span id="status-text">Awaiting your payment...</span>
             </div>
 
+            <!-- Mobile UPI Button -->
+            <a href="upi://pay?pa=vssanjay11@ptyes&pn=Sanjay&am=10&cu=INR&tn=Enthiram Offering"
+               class="upi-pay-btn" id="upi-mobile-btn">
+                <i class="fas fa-mobile-alt"></i>
+                Pay ₹10 with UPI App
+            </a>
+
+            <!-- Desktop QR -->
+            <div class="qr-section desktop-only">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                    <i class="fas fa-qrcode" style="margin-right:6px;"></i>Desktop? Scan to Pay
+                </p>
+                <div class="qr-frame">
+                    <img id="qr-image" src="" alt="UPI QR Code">
+                </div>
+                <p class="upi-id-text">vssanjay11@ptyes</p>
+            </div>
+
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 15px; line-height: 1.6;">
+                <i class="fas fa-lock" style="margin-right:5px;"></i>
+                Your offering is being monitored in real time. Please do not close this page.
+            </p>
         </div>
-    </div>
+    </section>
 
-    <!-- Celebration Elements Container -->
-    <div id="balloon-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;"></div>
+    <!-- ===================== DEEP SPACE SPACER (forces scrolling) ===================== -->
+    <div class="deep-space"></div>
+
+    <!-- ===================== SECRET BOTTOM SECTION ===================== -->
+    <section class="secret-section" id="secret-section">
+        <button class="secret-download-btn" id="secret-btn">
+            <i class="fas fa-cloud-arrow-down"></i>
+            Click Here to Download
+        </button>
+        <p class="secret-hint-text">Payment Verified Access</p>
+    </section>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const upiString = "upi://pay?pa=vssanjay11@ptyes&pn=Sanjay&am=10&cu=INR&tn=Enthiram Offering";
             const urlParams = new URLSearchParams(window.location.search);
-            const userNumericId = urlParams.get('id');
-            
-            const card = document.getElementById('payment-card');
-            const inputField = document.getElementById('verify-id-input');
-            const errorBox = document.getElementById('verify-error-box');
-            const errorText = document.getElementById('verify-error');
-            const verifyBtn = document.getElementById('verify-btn');
+            const numericId = urlParams.get('id');
+
+            // Generate QR
+            const upiString = "upi://pay?pa=vssanjay11@ptyes&pn=Sanjay&am=10&cu=INR&tn=Enthiram Offering";
             const qrImage = document.getElementById('qr-image');
-            const failedBtn = document.getElementById('payment-failed-btn');
-
-            if (userNumericId) inputField.value = userNumericId;
             if (qrImage) {
-                qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiString)}&color=000000&bgcolor=ffffff`;
+                qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=${encodeURIComponent(upiString)}&color=000000&bgcolor=ffffff`;
             }
 
-            // Redirect to failure page
-            failedBtn.addEventListener('click', () => {
-                window.location.href = '/failure.html';
-            });
+            if (!numericId) {
+                window.location.href = '/';
+                return;
+            }
 
-            // ===== CELEBRATION ANIMATIONS =====
-            const celebrateSuccess = () => {
-                document.body.classList.add('payment-success');
-                card.classList.add('success');
-                
-                // Flash effect
-                const flash = document.createElement('div');
-                flash.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.4);z-index:2000;pointer-events:none;transition:opacity 0.5s ease-out;';
-                document.body.appendChild(flash);
-                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 500); }, 50);
+            // ===== 5-MINUTE COUNTDOWN =====
+            const TOTAL_SECONDS = 5 * 60;
+            let timeLeft = TOTAL_SECONDS;
+            const timerEl = document.getElementById('timer-display');
+            const timerBar = document.getElementById('timer-bar');
 
-                // Confetti burst
-                const count = 200;
-                const defaults = { origin: { y: 0.7 }, zIndex: 1100 };
-                const fire = (r, opts) => confetti({ ...defaults, ...opts, particleCount: Math.floor(count * r) });
-                fire(0.25, { spread: 26, startVelocity: 55 });
-                fire(0.2, { spread: 60 });
-                fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-                fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-                fire(0.1, { spread: 120, startVelocity: 45 });
+            function updateTimer() {
+                const m = Math.floor(timeLeft / 60);
+                const s = timeLeft % 60;
+                timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+                timerBar.style.width = `${(timeLeft / TOTAL_SECONDS) * 100}%`;
 
-                // Firework finale
-                let duration = 3 * 1000;
-                let animEnd = Date.now() + duration;
-                let interval = setInterval(() => {
-                    let timeLeft = animEnd - Date.now();
-                    if (timeLeft <= 0) return clearInterval(interval);
-                    let pc = 50 * (timeLeft / duration);
-                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.1, y: Math.random()-0.2 } });
-                    confetti({ ...defaults, particleCount: pc, origin: { x: Math.random()*0.4+0.5, y: Math.random()-0.2 } });
-                }, 250);
-
-                // Emoji burst
-                const scalar = 2;
-                confetti({
-                    shapes: [
-                        confetti.shapeFromText({ text: '🕉️', scalar }),
-                        confetti.shapeFromText({ text: '✨', scalar }),
-                        confetti.shapeFromText({ text: '🙏', scalar })
-                    ],
-                    particleCount: 40, spread: 80, origin: { y: 0.6 }, scalar
-                });
-
-                // Balloons
-                const balloonContainer = document.getElementById('balloon-container');
-                const colors = ['#8a2be2','#00f2fe','#ffd700','#ff0080','#10b981'];
-                for(let i=0; i<20; i++) {
-                    setTimeout(() => {
-                        const b = document.createElement('div');
-                        b.className = 'balloon';
-                        b.style.left = Math.random()*100 + 'vw';
-                        b.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-                        b.style.animation = `floatUp ${4+Math.random()*3}s linear forwards`;
-                        balloonContainer.appendChild(b);
-                        setTimeout(() => b.remove(), 7000);
-                    }, i*150);
+                if (timeLeft <= 60) {
+                    timerEl.classList.add('urgent');
                 }
-            };
-
-            // ===== 3-SECOND COUNTDOWN REDIRECT =====
-            function startCountdownRedirect(numericId) {
-                let countdown = 3;
-                const numEl = document.getElementById('countdown-number');
-                const ring = document.getElementById('progress-ring');
-                const circumference = 188; // 2 * PI * 30
-
-                ring.style.strokeDashoffset = 0;
-
-                const tick = setInterval(() => {
-                    countdown--;
-                    numEl.textContent = countdown;
-                    ring.style.strokeDashoffset = circumference * (1 - countdown / 3);
-
-                    if (countdown <= 0) {
-                        clearInterval(tick);
-                        window.location.href = `/download.html?id=${numericId}`;
-                    }
-                }, 1000);
             }
 
-            // ===== VERIFY BUTTON =====
-            verifyBtn.addEventListener('click', async () => {
-                const numericId = inputField.value.trim();
-                
-                if (!numericId) {
-                    card.classList.add('shake');
-                    setTimeout(() => card.classList.remove('shake'), 500);
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimer();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    clearInterval(pollInterval);
+                    window.location.href = '/failure.html?reason=timeout';
+                }
+            }, 1000);
+
+            updateTimer();
+
+            // ===== BACKGROUND POLLING (every 5 seconds) =====
+            let alreadyTriggered = false;
+
+            async function checkPaymentStatus() {
+                if (alreadyTriggered) return;
+                try {
+                    const res = await fetch(`/api/check-status/${numericId}`);
+                    const data = await res.json();
+                    if (data.verified && !alreadyTriggered) {
+                        alreadyTriggered = true;
+                        clearInterval(timerInterval);
+                        clearInterval(pollInterval);
+                        onPaymentVerified();
+                    }
+                } catch (e) {
+                    // Silent fail — keep polling
+                }
+            }
+
+            const pollInterval = setInterval(checkPaymentStatus, 5000);
+            checkPaymentStatus(); // immediate first check
+
+            // ===== ON PAYMENT VERIFIED (auto-scroll to secret button) =====
+            function onPaymentVerified() {
+                // Update status indicator
+                const dot = document.getElementById('status-dot');
+                const statusText = document.getElementById('status-text');
+                dot.style.background = '#10b981';
+                dot.style.animation = 'none';
+                statusText.textContent = '✅ Payment Confirmed! Scroll down to unlock...';
+
+                // Swift smooth scroll to secret section
+                const secretSection = document.getElementById('secret-section');
+                secretSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // After scroll completes, make button extra dramatic
+                setTimeout(() => {
+                    document.getElementById('secret-btn').classList.add('revealed');
+                }, 900);
+            }
+
+            // ===== SECRET BUTTON CLICK =====
+            const secretBtn = document.getElementById('secret-btn');
+            secretBtn.addEventListener('click', async () => {
+                if (alreadyTriggered) {
+                    // Already verified via polling — just redirect
+                    window.location.href = `/success.html?id=${numericId}`;
                     return;
                 }
 
-                errorBox.style.display = 'none';
-                verifyBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> VERIFYING...';
-                verifyBtn.disabled = true;
+                // Try to verify
+                secretBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
+                secretBtn.classList.add('loading');
 
                 try {
-                    const response = await fetch('/api/verify-payment', {
+                    const res = await fetch('/api/verify-payment', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ numericId })
                     });
-                    
-                    const data = await response.json();
+                    const data = await res.json();
 
                     if (data.success) {
-                        // Show success section
-                        const checkout = document.getElementById('checkout-section');
-                        const success = document.getElementById('success-section');
-                        
-                        checkout.style.opacity = '0';
-                        checkout.style.transform = 'translateY(-20px)';
-                        
-                        setTimeout(() => {
-                            checkout.style.display = 'none';
-                            success.style.display = 'block';
-                            setTimeout(() => {
-                                success.style.opacity = '1';
-                                success.style.transform = 'translateY(0)';
-                                celebrateSuccess();
-                                startCountdownRedirect(numericId);
-                            }, 50);
-                        }, 500);
+                        alreadyTriggered = true;
+                        clearInterval(timerInterval);
+                        clearInterval(pollInterval);
 
+                        // Quick success flash on button
+                        secretBtn.innerHTML = '<i class="fas fa-check-circle"></i> Unlocked!';
+                        secretBtn.style.background = 'rgba(16, 185, 129, 0.3)';
+                        secretBtn.style.color = '#ffffff';
+
+                        setTimeout(() => {
+                            window.location.href = `/success.html?id=${numericId}`;
+                        }, 700);
                     } else {
-                        // Verification failure — shake and show error
-                        card.classList.add('shake');
-                        setTimeout(() => card.classList.remove('shake'), 500);
-                        verifyBtn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK';
-                        verifyBtn.disabled = false;
-                        errorText.textContent = data.error || "Entry Not Found";
-                        errorBox.style.display = 'block';
+                        secretBtn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i> Click Here to Download';
+                        secretBtn.classList.remove('loading');
                     }
                 } catch (err) {
-                    verifyBtn.innerHTML = '<i class="fas fa-shield-halved" style="margin-right: 8px;"></i> VALIDATE & UNLOCK';
-                    verifyBtn.disabled = false;
-                    errorText.textContent = "Connection Failure. Check your internet.";
-                    errorBox.style.display = 'block';
+                    secretBtn.innerHTML = '<i class="fas fa-cloud-arrow-down"></i> Click Here to Download';
+                    secretBtn.classList.remove('loading');
                 }
             });
         });
+
+        // ===== STAR CANVAS =====
+        (function () {
+            const canvas = document.getElementById('star-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resize();
+            const stars = Array.from({ length: 180 }, () => ({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 1.2 + 0.2, o: Math.random() * 0.5 + 0.1,
+                sp: Math.random() * 0.01 + 0.003, ph: Math.random() * Math.PI * 2
+            }));
+            function draw(t) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    const op = s.o * (0.6 + 0.4 * Math.sin(t * s.sp + s.ph));
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${op})`;
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            requestAnimationFrame(draw);
+            window.addEventListener('resize', resize);
+        })();
     </script>
 </body>
 </html>
